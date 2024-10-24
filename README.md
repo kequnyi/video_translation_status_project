@@ -6,9 +6,8 @@ This project simulates a backend server for video translation and a client libra
 
 The server is a simple Flask application that mimics a job status backend.
 
-### Run the server:
+### Runing server and client
 
-```bash
-cd server
-pip install -r requirements.txt
+integration test
 python -m unittest tests/test_integration.py
+example results are saved under 'client.log'
