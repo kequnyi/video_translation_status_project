@@ -2,6 +2,12 @@ import time
 import requests
 import logging
 
+# Set up logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', handlers=[
+    logging.FileHandler("client.log"),  # Save logs to client.log
+    logging.StreamHandler()             # Also output to console
+])
+
 class StatusClient:
     def __init__(self, url, initial_backoff=1, max_backoff=60, timeout=10, retries=5):
         self.url = url
@@ -26,12 +32,13 @@ class StatusClient:
                     if callback:
                         callback(result)
                     return result
-
+                logging.info(f"Waiting for {backoff} seconds before retrying...")
                 time.sleep(backoff)
                 backoff = min(backoff * 2, self.max_backoff)
                 attempts += 1
             except requests.RequestException as e:
                 logging.error(f"Request failed: {e}")
+                logging.info(f"Waiting for {backoff} seconds before retrying...")
                 time.sleep(backoff)
                 backoff = min(backoff * 2, self.max_backoff)
                 attempts += 1
